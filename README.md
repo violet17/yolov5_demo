@@ -81,13 +81,29 @@ Where --input_model defines the pre-trained model,  the parameter --model_name i
 
 After that, we can get IR of YOLOv5s in FP32 in folder yolov5-v3.
 
-##	OpenVINO Inference Python Demo
+##	OpenVINO Inference Python Demo(for OpenVINO version <= 2021.1)
 After generate IR of YOLOv5 model, we write the inference Python demo according to the inference process of YOLOv5 model. Based on the YOLOv3 demo provided in OpenVINO default Python demos, there are mainly three points need to be revised in YOLOv5 demo:
 -	Preprocessing input images by letterbox
 -	YOLO region layer using Sigmoid function
 -	Post-processing of the bounding box
 
 The inference Python demo can be found at [yolov5_demo.py](https://github.com/violet17/yolov5_demo/blob/main/yolov5_demo.py)
+
+Usage:
+```
+python yolov5_demo.py -i img.jpg -m yolov5s.xml
+```
+
+##	OpenVINO Inference Python Demo(for OpenVINO version > 2021.1)
+Since the API of IENetwork Class is changed, running the yolov5_demo.py would get errors like :
+AttributeError: 'openvino.inference_engine.ie_api.IENetwork' object has no attribute 'layers'
+This is because the layers attribute in IENetwork has been removed after OpenVINO 2021.2 [https://docs.openvinotoolkit.org/2021.1/ie_python_api/classie__api_1_1IENetwork.html].
+
+So I update the newer demo for OpenVINO 2021.2 or later, which has been tested on OpenVINO 2021.3.
+Usage:
+```
+python yolov5_demo_OV2021.3.py -i img.jpg -m yolov5s.xml
+```
 
 ## Reference
 
