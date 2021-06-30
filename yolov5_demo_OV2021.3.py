@@ -320,15 +320,13 @@ def main():
         # Collecting object detection results
         objects = list()
         if exec_net.requests[cur_request_id].wait(-1) == 0:
-            output = exec_net.requests[cur_request_id].outputs
-            #print("output", output)
+            output = exec_net.requests[cur_request_id].output_blobs
             start_time = time()
             for layer_name, out_blob in output.items():
-                #out_blob = out_blob.reshape(net.layers[layer_name].out_data[0].shape)
-                layer_params = YoloParams(side=out_blob.shape[2])
+                layer_params = YoloParams(side=out_blob.buffer.shape[2])
                 log.info("Layer {} parameters: ".format(layer_name))
                 layer_params.log_params()
-                objects += parse_yolo_region(out_blob, in_frame.shape[2:],
+                objects += parse_yolo_region(out_blob.buffer, in_frame.shape[2:],
                                              #in_frame.shape[2:], layer_params,
                                              frame.shape[:-1], layer_params,
                                              args.prob_threshold)
